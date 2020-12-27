@@ -1,0 +1,26 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  labels:
+    {{- include "dousu-home-network-monitoring.labels" . | nindent 4 }}
+spec:
+  version: {{ .Values.esVersion }}
+  nodeSets:
+    - name: {{ include "dousu-home-network-monitoring.chart" . | trunc 23 }}
+      count: {{ .Values.esReplicaCount }}
+      config:
+        node.master: true
+        node.data: true
+        node.ingest: true
+        node.store.allow_mmap: false
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5Gi
+            storageClassName: hostpath

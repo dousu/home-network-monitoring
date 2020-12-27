@@ -1,0 +1,19 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  labels:
+    {{- include "dousu-home-network-monitoring.labels" . | nindent 4 }}
+spec:
+  version: {{ .Values.esVersion }}
+  count: {{ .Values.kibanaReplicaCount }}
+  elasticsearchRef:
+    name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  http:
+    service:
+      metadata:
+        name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+        labels:
+          {{- include "dousu-home-network-monitoring.labels" . | nindent 10 }}
+      spec:
+        type: NodePort

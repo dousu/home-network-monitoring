@@ -1,0 +1,22 @@
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  labels:
+    {{- include "dousu-home-network-monitoring.labels" . | nindent 4 }}
+spec:
+  type: heartbeat
+  version: {{ .Values.esVersion }}
+  elasticsearchRef:
+    name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  kibanaRef:
+    name: {{ include "dousu-home-network-monitoring.fullname" . | trunc 23 }}
+  config:
+    heartbeat.monitors:
+      {{- toYaml .Values.monitors | nindent 6 }}
+  deployment:
+    replicas: {{ .Values.heartbeatReplicaCount }}
+    podTemplate:
+      spec:
+        securityContext:
+          runAsUser: 0

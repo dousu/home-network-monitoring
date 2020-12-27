@@ -1,0 +1,12 @@
+1. Get the application URL by running these commands:
+
+```
+PORT=kubectl -n home-network-monitoring get svc home-network-monitoring-kb-http -o=jsonpath='{.spec.ports[0].nodePort}'
+URL=https://localhost:${PORT}
+```
+
+2. Get credential:
+
+```
+kubectl -n home-network-monitoring get secret home-network-monitoring-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo
+```

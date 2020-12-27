@@ -1,0 +1,17 @@
+# Default values for dousu-home-network-monitoring.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+esReplicaCount: 1
+kibanaReplicaCount: 1
+heartbeatReplicaCount: 1
+esVersion: 7.10.1
+
+nameOverride: ""
+fullnameOverride: ""
+
+# 以下の設定を変えればプロトコルや取得間隔，アクセス先の変更が可能
+monitors:
+  - type: http
+    schedule: "@every 1m"
+    hosts: ["https://www.google.com/"]
